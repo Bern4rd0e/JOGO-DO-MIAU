@@ -1,0 +1,29 @@
+v0:
+  Espaço com nave se movendo para a direita e esquerda
+
+v1:
+  Nave se move em todas as direções
+
+v2:
+  Acrescenta estrelas (List). divide em funções
+
+v3:  
+  Quando a nave passa por uma estrela, a mesma desaparece (a nave cata a estrela)
+  Estrelas surgem lentamente e dinamicamente
+
+v4:
+  Novo movimento da nave. A mesma passa a girar em torno do próprio eixo (direita e esquerda) e a aceleração é implementada
+
+v5: 
+  Estado do jogo: jogando e fim_de_jogo
+  Placar (10 pontos para cada estrela catada)
+
+v6: 
+  Estado do jogo: Movimento da estrela. 3d girando sobre o próprio eixo
+
+v7: 
+  Som ao catar uma estrela
+
+v8:
+  Início e fim de jogo
+  Temporizador para tempo total de jogo
