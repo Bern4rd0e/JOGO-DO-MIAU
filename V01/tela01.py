@@ -1,5 +1,8 @@
 import pygame
+
 import random
+import sys
+import time
 
 # Inicializa o Pygame
 pygame.init()
@@ -10,18 +13,13 @@ tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("Alimente o gatinho")
 
 # Imagem de fundo
-fundo = pygame.image.load("./fundo.webp")
+fundo = pygame.image.load("./V01/fundo.webp")
 
 # Imagem gatinho
-gatinhoBocaFechada = pygame.image.load("./bocaFechada.png")
+gatinhoBocaFechada = pygame.image.load("./V01/bocaFechada.png")
 gatinhoBocaFechada = pygame.transform.scale(gatinhoBocaFechada, (100, 100))
-petisco = pygame.image.load("./petisco.png")
+petisco = pygame.image.load("./V01/petisco.png")
 petisco = pygame.transform.scale(petisco, (80, 80))
-
-naverect = petisco.get_rect()
-naverect.y = 240
-naverect.x = 320
-
 
 # Posição inicial da imagem petisco
 x = random.randint(0, largura - petisco.get_width())  # Posição aleatória dentro da tela
@@ -33,27 +31,11 @@ velocidade = 5
 # Loop principal
 rodando = True
 while rodando:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        naverect.x -= 5
-        if naverect.left < 0:
-            naverect.left = 0
-    if keys[pygame.K_RIGHT]:
-        naverect.x += 5
-        if naverect.right > 640:
-            naverect.right = 640
-    if keys[pygame.K_DOWN]:
-        naverect.y += 5
-        if naverect.bottom > 480:
-            naverect.bottom = 480
-    if keys[pygame.K_UP]:
-        naverect.y -= 5
-        if naverect.top < 0:
-            naverect.top = 0
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:  # Fecha a janela
+            rodando = False
+
+    
 
     # Define o fundo branco
     # tela.fill((255, 255, 255)) 
