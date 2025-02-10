@@ -23,7 +23,6 @@ petisco = pygame.transform.scale(petisco, (80, 80))
 
 # Posição inicial da imagem petisco
 velocidade_max = 5  # Velocidade máxima de queda
-gatinho_velocidade = 5
 contador = 0
 
 # Lista de petiscos
@@ -41,6 +40,7 @@ for _ in range(5):
 
 # Posição do gatinho
 gatinho_rect = pygame.Rect(300, 450, gatinhoBocaFechada.get_width(), gatinhoBocaFechada.get_height())  # Cria um retângulo para o gatinho
+gatinho_velocidade = 5  # Velocidade do gatinho
 
 # Loop principal
 rodando = True
@@ -61,7 +61,6 @@ while rodando:
         gatinho_rect.x = 0
     elif gatinho_rect.x > largura - gatinho_rect.width:
         gatinho_rect.x = largura - gatinho_rect.width
-
 
     # Atualiza a posição de cada petisco
     for petisco_obj in petiscos:
@@ -98,14 +97,10 @@ while rodando:
 
     # Desenha o gatinho
     if boca == "aberta":
-
-        tela.blit(gatinhoBocaAberta, (300, 450))
-        
+        tela.blit(gatinhoBocaAberta, (gatinho_rect.x, gatinho_rect.y))
         boca = "fechada"
     else:
-        tela.blit(gatinhoBocaFechada, (300, 450))
-
-
+        tela.blit(gatinhoBocaFechada, (gatinho_rect.x, gatinho_rect.y))
 
     # Desenha os petiscos
     for petisco_obj in petiscos:

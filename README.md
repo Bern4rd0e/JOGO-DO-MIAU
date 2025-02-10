@@ -16,3 +16,8 @@ V03 - Versão 03 do jogo:
 V04 - Versão 04 do jogo:
     * Adição de gatinhoBocaAberta.
         - Quando petisco atingir gatinho, a imagem é trocada.
+
+        
+V05 - Versão 05 do jogo:
+    * Adição da movimentação do gatinho.
+        - Quando apertada a tecla RIGHT ou LEFT, o gatinho automaticamente se movimentará.
