@@ -10,12 +10,12 @@ tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("Alimente o gatinho")
 
 # Imagem de fundo
-fundo = pygame.image.load("./V02/fundo.webp")
+fundo = pygame.image.load("fundo.webp")
 
 # Imagem gatinho
-gatinhoBocaFechada = pygame.image.load("./V02/bocaFechada.png")
+gatinhoBocaFechada = pygame.image.load("bocaFechada.png")
 gatinhoBocaFechada = pygame.transform.scale(gatinhoBocaFechada, (100, 100))
-petisco = pygame.image.load("./V02/petisco.png")
+petisco = pygame.image.load("petisco.png")
 petisco = pygame.transform.scale(petisco, (80, 80))
 
 # Posição inicial da imagem petisco
