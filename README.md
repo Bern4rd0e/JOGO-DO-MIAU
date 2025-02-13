@@ -21,3 +21,11 @@ V04 - Versão 04 do jogo:
 V05 - Versão 05 do jogo:
     * Adição da movimentação do gatinho.
         - Quando apertada a tecla RIGHT ou LEFT, o gatinho automaticamente se movimentará.
+
+V06 - Versão 06 do jogo:
+    * Adição de som.
+        - Quando o petisco toca o gatinho, ele mia.
+
+V06 - Versão 06 do jogo:
+    * Adição de temporizador e mudança na posição do gatinho.
+        - Quando o petisco toca o gatinho, ele mia.

@@ -54,7 +54,7 @@ for _ in range(5):
     })
 
 # Posição do gatinho
-gatinho_rect = pygame.Rect(300, 450, gatinhoBocaFechada.get_width(), gatinhoBocaFechada.get_height())  # Cria um retângulo para o gatinho
+gatinho_rect = pygame.Rect(300, 500, gatinhoBocaFechada.get_width(), gatinhoBocaFechada.get_height())  # Cria um retângulo para o gatinho
 gatinho_velocidade = 5  # Velocidade do gatinho
 
 def exibir_pontuacao(pontos):
