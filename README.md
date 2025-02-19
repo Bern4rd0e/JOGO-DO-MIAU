@@ -26,6 +26,5 @@ V06 - Versão 06 do jogo:
     * Adição de som.
         - Quando o petisco toca o gatinho, ele mia.
 
-V06 - Versão 06 do jogo:
+V07 - Versão 06 do jogo:
     * Adição de temporizador e mudança na posição do gatinho.
-        - Quando o petisco toca o gatinho, ele mia.

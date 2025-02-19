@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+import sys
 
 # Inicializa o Pygame
 pygame.init()
@@ -27,15 +28,16 @@ petisco = pygame.image.load("petisco.png")
 petisco = pygame.transform.scale(petisco, (80, 80))
 
 # Posição inicial da imagem petisco
-velocidade_max = 5  # Velocidade máxima de queda
+velocidade_max = 5  # Reduzindo a velocidade máxima de queda
 contador = 0
 
 # Lista de petiscos
 petiscos = []
 boca = "fechada"
+tempo_boca_aberta = 0  # Variável para controlar o tempo que a boca fica aberta
 
-#TEMPO
-tempo_limite = 5000  # 5 segundos (em milissegundos)
+# Tempo do jogo
+tempo_limite = 15000  # 15 segundos (em milissegundos)
 inicio_tempo = pygame.time.get_ticks()  # Obtém o tempo inicial em milissegundos
 
 som = pygame.mixer.Sound("miado.ogg")
@@ -44,35 +46,43 @@ pygame.mixer.music.load("garcom.ogg")
 # Tocar a música em loop (-1 significa loop infinito)
 pygame.mixer.music.play(loops=-1)
 
-# Gera 5 petiscos com posições e velocidades aleatórias
-for _ in range(5):
+# Gera 10 petiscos com posições e velocidades aleatórias
+for _ in range(10):
     petiscos.append({
         "x": random.randint(0, largura - petisco.get_width()),  # Posição aleatória no eixo X
         "y": random.randint(-100, -10),  # Inicia um pouco acima da tela
-        "velocidade": random.randint(3, velocidade_max),  # Velocidade aleatória
+        "velocidade": random.randint(1, velocidade_max),  # Velocidade aleatória reduzida
         "direcao_x": random.choice([-1, 1]) * random.randint(1, 3)  # Direção aleatória no eixo X
     })
 
 # Posição do gatinho
 gatinho_rect = pygame.Rect(300, 500, gatinhoBocaFechada.get_width(), gatinhoBocaFechada.get_height())  # Cria um retângulo para o gatinho
-gatinho_velocidade = 5  # Velocidade do gatinho
+gatinho_velocidade = 7  # Reduzindo a velocidade do gatinho
+
+# Fonte e relógio
+fonte = pygame.font.SysFont('Arial', 30)
+clock = pygame.time.Clock()
 
 def exibir_pontuacao(pontos):
     # Definir as cores
     branco = (255, 255, 255)
 
     # Definir a fonte
-    fonte = pygame.font.SysFont('Arial', 30)
     texto_pontuacao = fonte.render(f'Pontos: {pontos}', True, branco)
     
     return texto_pontuacao
 
 # Loop principal
 rodando = True
+tempo_acabado = False  # Variável que controla se o tempo acabou
 while rodando:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:  # Fecha a janela
             rodando = False
+
+    # Se o tempo já acabou, o jogo vai ficar "congelado"
+    if tempo_acabado:
+        continue  # Não faz mais nada no loop (congelando o jogo)
 
     # Detecta o pressionamento das teclas para mover o gatinho
     teclas = pygame.key.get_pressed()
@@ -98,6 +108,7 @@ while rodando:
         # Verifica colisão entre o gatinho e o petisco
         if gatinho_rect.colliderect(petisco_rect):  # Se o retângulo do gatinho colidir com o petisco
             boca = "aberta"
+            tempo_boca_aberta = pygame.time.get_ticks()  # Marca o tempo em que a boca foi aberta
             # Reinicia a posição do petisco (ele "desaparece" e reaparece em um novo local)
             petisco_obj['y'] = random.randint(-100, -10)  # Reinicia no topo
             petisco_obj['x'] = random.randint(0, largura - petisco.get_width())  # Posição X aleatória
@@ -122,22 +133,36 @@ while rodando:
 
     # Limpar a tela (preencher com o fundo)
     tela.fill((0, 0, 0))
-    tela.blit(fundo,(0,0))
+    tela.blit(fundo, (0, 0))
 
-    # Exibir a pontuação
-    texto_pontuacao = exibir_pontuacao(contador)
-    tela.blit(texto_pontuacao, (10, 10))
+    # Calculando o tempo restante
+    tempo_passado = pygame.time.get_ticks() - inicio_tempo  # Tempo que passou desde o início
+    tempo_restante = max(0, (tempo_limite - tempo_passado) // 1000)  # Calcula o tempo restante em segundos
+
+    # Exibir o temporizador na tela
+    tempo_texto = fonte.render(f"Tempo Restante: {tempo_restante} s", True, (255, 255, 255))
+    tela.blit(tempo_texto, (largura - 260, 10))
+
+    # Se o tempo acabou, exibe "Fim do Jogo" e congela o jogo
+    if tempo_restante == 0 and not tempo_acabado:
+        tempo_acabado = True  # Marca que o tempo acabou
+        game_over_text = fonte.render("Fim do Jogo!", True, (255, 0, 0))
+        tela.blit(game_over_text, (largura // 2 - 100, altura // 2 - 20))
+
+        # Exibe a pontuação final
+        final_score_text = fonte.render(f'Pontuação Final: {contador}', True, (255, 255, 255))
+        tela.blit(final_score_text, (largura // 2 - 120, altura // 2 + 30))
+
+    # Exibir a pontuação durante o jogo (só enquanto o tempo não acabou)
+    if not tempo_acabado:
+        texto_pontuacao = exibir_pontuacao(contador)
+        tela.blit(texto_pontuacao, (10, 10))
 
     # Desenha o gatinho
-    if boca == "aberta":
+    if boca == "aberta" and pygame.time.get_ticks() - tempo_boca_aberta < 300:  # A boca ficará aberta por 300 ms
         tela.blit(gatinhoBocaAberta, (gatinho_rect.x, gatinho_rect.y))
-        # Carregar o arquivo de áudio (certifique-se de que o arquivo existe e está no formato correto, como .mp3 ou .wav)
-        
         # Reproduzir o som
         som.play()
-        pygame.time.wait(10)  # tempo em milissegundos, por exemplo, 2000ms = 2 segundos
-
-        boca = "fechada"
     else:
         tela.blit(gatinhoBocaFechada, (gatinho_rect.x, gatinho_rect.y))
 
@@ -147,8 +172,10 @@ while rodando:
 
     # Atualiza a tela
     pygame.display.flip()
-    # Controla a velocidade da animação
-    pygame.time.delay(30)
+
+    # Controlando os frames por segundo (FPS)
+    clock.tick(40)  # Reduziu a taxa de quadros por segundo para diminuir a velocidade do jogo
 
 # Finaliza o Pygame
 pygame.quit()
+sys.exit()
