@@ -37,10 +37,11 @@ boca = "fechada"
 tempo_boca_aberta = 0  # Variável para controlar o tempo que a boca fica aberta
 
 # Tempo do jogo
-tempo_limite = 15000  # 15 segundos (em milissegundos)
+tempo_limite = 30000  # 15 segundos (em milissegundos)
 inicio_tempo = pygame.time.get_ticks()  # Obtém o tempo inicial em milissegundos
 
 som = pygame.mixer.Sound("miado.ogg")
+som.set_volume(0.1) 
 pygame.mixer.music.load("garcom.ogg")
 
 # Tocar a música em loop (-1 significa loop infinito)
@@ -72,9 +73,11 @@ def exibir_pontuacao(pontos):
     
     return texto_pontuacao
 
+# Variável para controle do fim do jogo
+tempo_acabado = False  # Variável que controla se o tempo acabou
+
 # Loop principal
 rodando = True
-tempo_acabado = False  # Variável que controla se o tempo acabou
 while rodando:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:  # Fecha a janela
@@ -82,7 +85,22 @@ while rodando:
 
     # Se o tempo já acabou, o jogo vai ficar "congelado"
     if tempo_acabado:
-        continue  # Não faz mais nada no loop (congelando o jogo)
+        # Parar a música e não tocar mais
+        pygame.mixer.music.stop()
+        
+        # Limpar a tela e exibir apenas o fundo
+        tela.fill((0, 0, 0))
+        tela.blit(fundo, (0, 0))  # Apenas o fundo após o tempo acabar
+
+        # Exibe a mensagem de fim de jogo e a pontuação
+        game_over_text = fonte.render("Fim do Jogo!", True, (255, 0, 0))
+        tela.blit(game_over_text, (largura // 2 - 100, altura // 2 - 20))
+
+        final_score_text = fonte.render(f'Pontuação Final: {contador}', True, (255, 255, 255))
+        tela.blit(final_score_text, (largura // 2 - 120, altura // 2 + 30))
+
+        pygame.display.flip()
+        continue  # Congela o jogo, não faz mais atualizações
 
     # Detecta o pressionamento das teclas para mover o gatinho
     teclas = pygame.key.get_pressed()
@@ -143,15 +161,9 @@ while rodando:
     tempo_texto = fonte.render(f"Tempo Restante: {tempo_restante} s", True, (255, 255, 255))
     tela.blit(tempo_texto, (largura - 260, 10))
 
-    # Se o tempo acabou, exibe "Fim do Jogo" e congela o jogo
+    # Se o tempo acabou, marca como tempo_acabado
     if tempo_restante == 0 and not tempo_acabado:
         tempo_acabado = True  # Marca que o tempo acabou
-        game_over_text = fonte.render("Fim do Jogo!", True, (255, 0, 0))
-        tela.blit(game_over_text, (largura // 2 - 100, altura // 2 - 20))
-
-        # Exibe a pontuação final
-        final_score_text = fonte.render(f'Pontuação Final: {contador}', True, (255, 255, 255))
-        tela.blit(final_score_text, (largura // 2 - 120, altura // 2 + 30))
 
     # Exibir a pontuação durante o jogo (só enquanto o tempo não acabou)
     if not tempo_acabado:
@@ -159,7 +171,7 @@ while rodando:
         tela.blit(texto_pontuacao, (10, 10))
 
     # Desenha o gatinho
-    if boca == "aberta" and pygame.time.get_ticks() - tempo_boca_aberta < 300:  # A boca ficará aberta por 300 ms
+    if boca == "aberta" and pygame.time.get_ticks() - tempo_boca_aberta < 30:  # A boca ficará aberta por 300 ms
         tela.blit(gatinhoBocaAberta, (gatinho_rect.x, gatinho_rect.y))
         # Reproduzir o som
         som.play()
