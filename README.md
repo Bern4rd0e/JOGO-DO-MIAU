@@ -28,3 +28,5 @@ V06 - Versão 06 do jogo:
 
 V07 - Versão 06 do jogo:
     * Adição de temporizador e mudança na posição do gatinho.
+    * Adição da tela inicial.
+    * Adição da tela final.
