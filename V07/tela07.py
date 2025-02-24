@@ -37,7 +37,7 @@ def exibir_tempo_restante(inicio_tempo, tempo_limite):
 def gerar_petiscos(num_petiscos):
     return [{"x": random.randint(0, largura - petisco.get_width()),  
              "y": random.randint(-100, -10),  
-             "velocidade": random.randint(5, 10),
+             "velocidade": random.randint(3, 5),
              "direcao_x": random.choice([-1, 1]) * random.randint(1, 3)} 
             for _ in range(num_petiscos)]
 
@@ -135,7 +135,7 @@ def jogo():
         pygame.mixer.music.play(loops=-1)
         gatinho_rect = pygame.Rect(300, 500, gatinhoBocaFechada.get_width(), gatinhoBocaFechada.get_height())
         contador = 0
-        tempo_limite = 3000
+        tempo_limite = 15000
         inicio_tempo = pygame.time.get_ticks()
         petiscos = gerar_petiscos(10)
         boca_aberta = 0
